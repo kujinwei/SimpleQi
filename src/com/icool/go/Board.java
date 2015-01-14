@@ -118,17 +118,20 @@ public class Board extends JPanel{
 				int y = y2Coordinate(yf);
 				
 //				System.out.println("x= " + x + ", y=" + y);
-				Coordinate c = new Coordinate(x , y) ;
+				
+				
+				Coordinate c = new Coordinate(x , y) ;				
 				char color = currTurn ;
+				Stone s = new Stone(c , color) ;
+				putStone(s) ;
+//				printBlocks() ;
+				update(getGraphics()) ;
+				
 				
 				if(canToggle) {
 					toogle() ;
 				}
 				
-				Stone s = new Stone(c , color) ;
-				putStone(s) ;
-//				printBlocks() ;
-				update(getGraphics()) ;
 //				getGraphics().drawImage(currImg, x*cellWidth-cellWidth/2 + xOffset , y*cellWidth-cellWidth/2 + yOffset, cellWidth , cellWidth , null) ;
 				
 			}
@@ -336,7 +339,7 @@ public class Board extends JPanel{
 		newBlock.add(stone.c) ;
 		blocks.add(newBlock) ;
 		int newAir = calcBlockAir(newBlock);
-		System.out.println("new air=" + newAir);
+//		System.out.println("new air=" + newAir);
 		
 		if(newAir == 0 && !bKilled) {			
 			canToggle = false ;
