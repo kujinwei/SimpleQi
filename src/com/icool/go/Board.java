@@ -49,6 +49,7 @@ public class Board extends JPanel{
 	
 	List<Coordinate> sgfCoordinates ;
 	int currStep = 0 ;
+	boolean canToggle = true ;
 
 	/**
 	 * Constructs a standard <code>Board</code> of size 19x19. 
@@ -116,11 +117,14 @@ public class Board extends JPanel{
 				int x = x2Coordinate(xf);
 				int y = y2Coordinate(yf);
 				
-				System.out.println("x= " + x + ", y=" + y);
+//				System.out.println("x= " + x + ", y=" + y);
 				Coordinate c = new Coordinate(x , y) ;
 				char color = currTurn ;
 				
-				toogle() ;
+				if(canToggle) {
+					toogle() ;
+				}
+				
 				Stone s = new Stone(c , color) ;
 				putStone(s) ;
 //				printBlocks() ;
@@ -287,6 +291,7 @@ public class Board extends JPanel{
 	public void update() {
 		this.update(getGraphics()) ;
 	}
+	
 	/**
 	 * put a stone on the board
 	 * @param stone
@@ -312,8 +317,7 @@ public class Board extends JPanel{
 				
 			}else{
 				if (block.airCount == 1) {//kill this block
-					stone.killedBlocks.add(block) ;
-					blocks.remove(block) ;
+					stone.killedBlocks.add(block) ;					
 					bKilled = true ;
 				}else{
 					block.airCount -- ;
@@ -326,30 +330,53 @@ public class Board extends JPanel{
 		for (Block block : stone.deletedBlocks) {
 			newBlock.addBlock(block) ;
 //			newBlock.airCount += block.airCount - 1 ;
-			blocks.remove(block) ;
+//			
 		}
 //		
 		newBlock.add(stone.c) ;
 		blocks.add(newBlock) ;
+		int newAir = calcBlockAir(newBlock);
+		System.out.println("new air=" + newAir);
 		
-		calcBlockAir(newBlock) ;
-		stone.newBlock = newBlock ;
-		//calculate the air for all blocks
-		if (bKilled) {
-			for (Block block  : blocks) {
-				calcBlockAir(block) ;
-				
+		if(newAir == 0 && !bKilled) {			
+			canToggle = false ;
+			blocks.remove(newBlock) ;
+			System.out.println("Not allowed!");
+			
+			
+		} else {
+			canToggle = true ;
+			for (Block block : stone.deletedBlocks) {				
+				blocks.remove(block) ;
 			}
+			for (Block block : stone.killedBlocks) {				
+				blocks.remove(block) ;
+			}
+			
+			
+			stone.newBlock = newBlock ;
+			//calculate the air for all blocks
+			if (bKilled) {
+				for (Block block  : blocks) {
+					calcBlockAir(block) ;
+					
+				}
+			}
+			
+			stones.add(stone) ;
 		}
 		
-		stones.add(stone) ;
 		
-		Util.printHeapUsage() ;
+		
+		
+		
+		
+//		Util.printHeapUsage() ;
 		
 		
 	}
 
-	public void calcBlockAir(Block b) {
+	public int calcBlockAir(Block b) {
 		int air = 0 ;
 		
 		HashMap map = new HashMap() ;
@@ -370,6 +397,8 @@ public class Board extends JPanel{
 		}
 		air = map.keySet().size() ;
 		b.airCount = air ;
+		
+		return air ;
 	}
 	
 	public void printBlocks() {

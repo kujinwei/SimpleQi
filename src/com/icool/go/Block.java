@@ -3,7 +3,11 @@ package com.icool.go;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Î§Æå¿é
+ * @author Administrator
+ *
+ */
 
 public class Block {
 	public List<Coordinate> strings = new ArrayList<Coordinate>();
