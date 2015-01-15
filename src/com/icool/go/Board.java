@@ -3,12 +3,14 @@
 package com.icool.go;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class Board extends JPanel{
 	List<Coordinate> sgfCoordinates ;
 	int currStep = 0 ;
 	boolean canToggle = true ;
+	Coordinate lastFocus = null ;
 
 	/**
 	 * Constructs a standard <code>Board</code> of size 19x19. 
@@ -151,6 +154,7 @@ public class Board extends JPanel{
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
+//				System.out.println(e.getX());
 				
 			}
 
@@ -161,6 +165,27 @@ public class Board extends JPanel{
 			}
 			
 		}) ;
+		
+		this.addMouseMotionListener(new MouseMotionListener() {
+			public void mouseDragged(MouseEvent e) {
+
+			}
+
+			public void mouseMoved(MouseEvent e) {
+				
+				float xf = e.getX();
+				float yf = e.getY();
+
+				int x = x2Coordinate(xf);
+				int y = y2Coordinate(yf);
+				Coordinate c = new Coordinate(x , y) ;	
+//				setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+				drawFocus(c) ;
+				lastFocus = c ;
+
+			}
+
+		});
 		
 	}
 	
@@ -369,7 +394,7 @@ public class Board extends JPanel{
 			stones.add(stone) ;
 		}
 		
-		
+		GoGui.getGUI().log("All blocks : " + blocks.size()) ;
 		
 		
 		
@@ -500,6 +525,29 @@ public class Board extends JPanel{
 //			g.drawRect(x2Screen(c.x)-3, y2Screen(c.y)-3
 //				, x2Screen(c.x)+3f, y2Screen(c.y)+3f, paint);
 //		}
+	}
+	
+	private void drawFocus(Coordinate c) {
+		
+		Graphics g = getGraphics() ;
+		
+		if(lastFocus != null) {
+			g.setXORMode( Color.WHITE );
+			g.setColor(Color.BLUE);
+//			Coordinate c=board.getLastPosition();
+			if(c!=null){
+				g.fillRect(x2Screen(lastFocus.x)-3, y2Screen(lastFocus.y)-3 , 6, 6);
+			}
+			
+		}
+		
+		g.setXORMode( Color.WHITE );
+		g.setColor(Color.BLUE);
+//		Coordinate c=board.getLastPosition();
+		if(c!=null){
+			g.fillRect(x2Screen(c.x)-3, y2Screen(c.y)-3 , 6, 6);
+		}
+		
 	}
 	
 	public Coordinate[] createStar(){

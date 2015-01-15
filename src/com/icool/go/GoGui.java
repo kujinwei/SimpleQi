@@ -23,15 +23,28 @@ public class GoGui{
 
 	JFrame mainframe ;
 	JPanel mainPnl ;
+	
 	String[] buttons = { "Go First", "Before", "Next", "Go Last", "Next 5" , "Before 5" , "Reset"};
 	JButton[] btns = new JButton[buttons.length];
 	Board board;
+	ActionPanel actionPnl ;
+	
 	
 	MainListener listener ;
+	protected static GoGui instance ;
 
 	public GoGui() {
 
 	}
+	
+	public static GoGui getGUI() {
+		if (instance == null) {
+			instance = new GoGui() ;
+		}
+		return instance ;
+	}
+	
+	
 
 	public void centre(Window w) {
 		// After packing a Frame or Dialog, centre it on the screen.
@@ -80,7 +93,10 @@ public class GoGui{
 		mainPnl = new JPanel() ;
 		mainPnl.setLayout(new BorderLayout());
 		board = new Board(19);
-		mainPnl.add(board, BorderLayout.NORTH);
+		mainPnl.add(board, BorderLayout.WEST);
+		
+		actionPnl = new ActionPanel() ;		
+		mainPnl.add(actionPnl, BorderLayout.CENTER);
 
 		listener = new MainListener(this) ;
 		
@@ -98,7 +114,7 @@ public class GoGui{
 		initMenu() ;
 		
 		mainframe.setTitle("Go Client");
-		mainframe.setSize(700, 680);
+		mainframe.setSize(800, 680);
 		centre(mainframe);
 //		mainframe.pack();
 		mainframe.setVisible(true);
@@ -108,8 +124,12 @@ public class GoGui{
 		
 	}
 	
+	public void log(String msg) {
+		actionPnl.appendMessage(msg) ;
+	}
+	
 	public static void main(String[] args) {
-		GoGui gui = new GoGui();
+		GoGui gui = GoGui.getGUI();
 		gui.init() ;
 		
 
