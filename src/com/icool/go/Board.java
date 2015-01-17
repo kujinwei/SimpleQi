@@ -297,17 +297,16 @@ public class Board extends JPanel{
 //		System.out.println("currStone.newBlock.strings.size = " + currStone.newBlock.strings.size());
 		blocks.remove(currStone.newBlock) ;
 		
-		for (Block block : currStone.killedBlocks) {
-			System.out.println(block.strings.size());
+		for (Block block : currStone.killedBlocks) {			
 			blocks.add(block) ;
 		}
 		
-		for (Block block : currStone.deletedBlocks) {
-			System.out.println(block.strings.size());
+		for (Block block : currStone.deletedBlocks) {			
 			blocks.add(block) ;
 		}
 		
 		stones.remove(currStone) ;
+		calcAllBlocksAir() ;
 		update() ;
 		currStep -- ;
 		
@@ -364,7 +363,7 @@ public class Board extends JPanel{
 		newBlock.add(stone.c) ;
 		blocks.add(newBlock) ;
 		int newAir = calcBlockAir(newBlock);
-//		System.out.println("new air=" + newAir);
+
 		
 		if(newAir == 0 && !bKilled) {			
 			canToggle = false ;
@@ -384,17 +383,15 @@ public class Board extends JPanel{
 			
 			stone.newBlock = newBlock ;
 			//calculate the air for all blocks
-			if (bKilled) {
-				for (Block block  : blocks) {
-					calcBlockAir(block) ;
-					
-				}
-			}
+//			if (bKilled) {
+//				calcAllBlocksAir() ;
+//			}
+			calcAllBlocksAir() ;
 			
 			stones.add(stone) ;
 		}
 		
-		GoGui.getGUI().log("All blocks : " + blocks.size()) ;
+//		GoGui.getGUI().log("All blocks : " + blocks.size()) ;
 		
 		
 		
@@ -402,6 +399,16 @@ public class Board extends JPanel{
 //		Util.printHeapUsage() ;
 		
 		
+	}
+	
+	/**
+	 * 计算所有块的气数
+	 */
+	public void calcAllBlocksAir(){
+		for (Block block  : blocks) {
+			calcBlockAir(block) ;
+			
+		}		
 	}
 
 	public int calcBlockAir(Block b) {
@@ -429,13 +436,18 @@ public class Board extends JPanel{
 		return air ;
 	}
 	
-	public void printBlocks() {
-		System.out.println("======all blocks=======");
+	public String printBlocks() {
+		StringBuffer buf = new StringBuffer() ;
+		buf.append("======all blocks=======\n") ;
+		int i = 0 ;
 		for (Block block  : blocks) {
-			System.out.println(block.airCount);
+			i++ ;
+			buf.append(i).append(" " + block.bw).append(": 子数=").append(block.strings.size()).append(" 气数=").append(block.airCount).append("\n");
 //			List<Coordinate> strings = block.strings ;
 			
 		}
+		return buf.toString() ;
+		
 	}
 	/**
 	 * Return the number of vertical or horizontal lines in the board.

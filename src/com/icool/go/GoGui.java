@@ -104,7 +104,7 @@ public class GoGui{
 		listener = new MainListener(this) ;
 		
 		JPanel pnl = new JPanel();
-		pnl.setLayout(new GridLayout(4,6));
+		pnl.setLayout(new GridLayout(0,6));
 		for (int i = 0; i < buttons.length ; i++) { // Add children to the pane
 			btns[i] = new JButton(buttons[i]);
 			pnl.add(btns[i]); // Using this constraint
@@ -165,7 +165,8 @@ class MainListener implements ActionListener {
 		}
 		
 		if (btn.getText().equals("All Blocks")) {
-			gui.log("总块数："+ gui.board.blocks.size()) ;
+			gui.log("总块数："+ gui.board.blocks.size() ) ;
+			gui.log(""+ gui.board.printBlocks()) ;
 		}
 		
 		
