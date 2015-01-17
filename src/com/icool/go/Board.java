@@ -327,18 +327,18 @@ public class Board extends JPanel{
 		
 		boolean bKilled = false ;
 		//detect all blocks near this stone
-		List<Block> nearBlocks = new ArrayList<Block>() ;
-		int myair = 4 ;
+		HashMap<Block , Block> nearBlocks = new HashMap<Block , Block>() ;
+//		int myair = 4 ;
 		for (Coordinate c : stone.c.near) {
 			Block b = getBlockByCoodinate(c) ;
-			if (b != null) {
-				nearBlocks.add(b) ;
-				myair -- ;
+			if (b != null && !nearBlocks.containsKey(b)) {
+				nearBlocks.put(b , b) ;
+//				myair -- ;
 			}
 			
 		}
 		
-		for (Block block : nearBlocks) {
+		for (Block block : nearBlocks.values()) {
 			if (block.bw == stone.color) {
 				stone.deletedBlocks.add(block) ;
 				
@@ -386,11 +386,11 @@ public class Board extends JPanel{
 //			if (bKilled) {
 //				calcAllBlocksAir() ;
 //			}
-			calcAllBlocksAir() ;
+			
 			
 			stones.add(stone) ;
 		}
-		
+		calcAllBlocksAir() ;
 //		GoGui.getGUI().log("All blocks : " + blocks.size()) ;
 		
 		
