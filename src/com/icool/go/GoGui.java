@@ -2,7 +2,7 @@ package com.icool.go;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -24,7 +24,10 @@ public class GoGui{
 	JFrame mainframe ;
 	JPanel mainPnl ;
 	
-	String[] buttons = { "Go First", "Before", "Next", "Go Last", "Next 5" , "Before 5" , "Reset"};
+	String[] buttons = { "Go First", "Before", "Next", "Go Last", 
+			"Next 5" , "Before 5" , "Reset" ,"Save" , "All Blocks",
+			"Air" , "Clear Console"
+			};
 	JButton[] btns = new JButton[buttons.length];
 	Board board;
 	ActionPanel actionPnl ;
@@ -101,7 +104,7 @@ public class GoGui{
 		listener = new MainListener(this) ;
 		
 		JPanel pnl = new JPanel();
-		pnl.setLayout(new FlowLayout());
+		pnl.setLayout(new GridLayout(4,6));
 		for (int i = 0; i < buttons.length ; i++) { // Add children to the pane
 			btns[i] = new JButton(buttons[i]);
 			pnl.add(btns[i]); // Using this constraint
@@ -114,7 +117,7 @@ public class GoGui{
 		initMenu() ;
 		
 		mainframe.setTitle("Go Client");
-		mainframe.setSize(800, 680);
+		mainframe.setSize(800, 720);
 		centre(mainframe);
 //		mainframe.pack();
 		mainframe.setVisible(true);
@@ -160,6 +163,18 @@ class MainListener implements ActionListener {
 		if (btn.getText().equals("Reset")) {
 			gui.board.reset() ;
 		}
+		
+		if (btn.getText().equals("All Blocks")) {
+			gui.log("×Ü¿éÊý£º"+ gui.board.blocks.size()) ;
+		}
+		
+		
+		
+		if (btn.getText().equals("Clear Console")) {
+			gui.actionPnl.clear();
+		}
+		
+		
 	}
 	
 	public void onMenuitemClick(JMenuItem menuitem) {

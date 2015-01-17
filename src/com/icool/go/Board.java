@@ -46,8 +46,8 @@ public class Board extends JPanel{
 	char currTurn = Game.BLACK; 
 	Image currImg ;
 	
-	List<Block> blocks = new ArrayList<Block>() ; //current blocks on board
-	List<Stone> stones = new ArrayList<Stone>() ;
+	public List<Block> blocks = new ArrayList<Block>() ; //current blocks on board
+	public List<Stone> stones = new ArrayList<Stone>() ;
 	
 	List<Coordinate> sgfCoordinates ;
 	int currStep = 0 ;

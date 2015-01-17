@@ -35,6 +35,11 @@ public class ActionPanel extends JPanel{
 		console.append(msg + "\n") ;
 	}
 	
+	public void clear() {
+		
+		console.setText("") ;
+		
+	}
 	
 	
 	
