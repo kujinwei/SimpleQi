@@ -53,6 +53,7 @@ public class Board extends JPanel{
 	int currStep = 0 ;
 	boolean canToggle = true ;
 	Coordinate lastFocus = null ;
+	Coordinate jie = null ; //当前劫
 
 	/**
 	 * Constructs a standard <code>Board</code> of size 19x19. 
@@ -320,21 +321,42 @@ public class Board extends JPanel{
 	}
 	
 	/**
+	 * 判断一个落子是否为打劫
+	 */
+	private Coordinate isJie(Stone stone) {
+		Coordinate c = null ;
+		for (Coordinate near : stone.c.near) {
+			
+		}
+		
+		return c ;
+		
+		
+	}
+	
+	/**
 	 * put a stone on the board
 	 * @param stone
 	 */
 	public void putStone(Stone stone) {
 		
+		if (stones.size() > 0 && stones.get(stones.size() - 1).jie != null 
+				&& stone.c.equals(stones.get(stones.size() - 1).jie)) {
+			canToggle = false ;
+			return ;
+		}
 		boolean bKilled = false ;
 		//detect all blocks near this stone
 		HashMap<Block , Block> nearBlocks = new HashMap<Block , Block>() ;
 //		int myair = 4 ;
+//		int anotherCount = 0 ;//周围对方子的数量，0~4
+		int killedCount = 0 ; //本次落子提掉对方的子数
 		for (Coordinate c : stone.c.near) {
 			Block b = getBlockByCoodinate(c) ;
 			if (b != null && !nearBlocks.containsKey(b)) {
 				nearBlocks.put(b , b) ;
-//				myair -- ;
-			}
+				
+			}		
 			
 		}
 		
@@ -347,7 +369,7 @@ public class Board extends JPanel{
 					stone.killedBlocks.add(block) ;					
 					bKilled = true ;
 				}else{
-					block.airCount -- ;
+//					block.airCount -- ;
 				}
 			}
 		}
@@ -378,6 +400,7 @@ public class Board extends JPanel{
 			}
 			for (Block block : stone.killedBlocks) {				
 				blocks.remove(block) ;
+				killedCount += block.strings.size() ;
 			}
 			
 			
@@ -388,9 +411,18 @@ public class Board extends JPanel{
 //			}
 			
 			
+			
+			GoGui.getGUI().log("killedCount=" + killedCount + ", newAir=" + newAir) ;
+			newAir = calcBlockAir(newBlock) ;
+			if (newAir == 1 && killedCount == 1) { //本次落子为提劫
+				GoGui.getGUI().log("提劫") ;
+				stone.jie = stone.killedBlocks.get(0).strings.get(0) ;				
+			}
+			
 			stones.add(stone) ;
 		}
 		calcAllBlocksAir() ;
+		
 //		GoGui.getGUI().log("All blocks : " + blocks.size()) ;
 		
 		

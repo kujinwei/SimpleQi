@@ -22,6 +22,7 @@ public class Stone {
 	public Block newBlock ;
 	public List<Block> deletedBlocks = new ArrayList<Block>() ;
 	public List<Block> killedBlocks = new ArrayList<Block>() ;
+	public Coordinate jie = null ; //如果有提劫，则指向被提掉子的位置
 
 	/**
 	 * Construct a <code>Point</code> with the given coordinates and
